@@ -1,35 +1,26 @@
 import React, { useState } from 'react';
-import { Button, StyleSheet, View } from 'react-native';
-import { RadialSlider } from 'react-native-radial-slider';
+import { Button, StyleSheet, Text, View } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
+import Speedgauge from "@/components/Speedgauge";
+import { useRecordSignal } from "@/hooks/useRecordSignal";
 
 export default function App() {
   const [speed, setSpeed] = useState(0);
 
+  const { stopRecording, startRecording, isRecordingAllowed, recording } = useRecordSignal();
+
   return (
     <ParallaxScrollView>
-      <Button title="expo-speeder!" onPress={() => setSpeed(speed === 0 ? 120 : 0)}/>
+      <Button title="expo-speeder!" onPress={() => setSpeed((speed + 10) % 180)}/>
+      <Button
+        disabled={!isRecordingAllowed}
+        title={recording ? 'Stop recording' : 'Start recording'}
+        onPress={recording ? stopRecording : startRecording}
+      />
       <View style={styles.container}>
-        <RadialSlider
-          variant="speedometer-marker"
-          value={speed}
-          min={0}
-          max={200}
-          // onChange={setSpeed}
-          radius={100}
-          unit="km/h"
-          unitValueContentStyle={{ backgroundColor: "#aaa", borderRadius: 10}}
-          // needleColor={"#8a4b4b"}
-          needleBorderWidth={0}
-          lineColor={"#aaa"}
-          sliderTrackColor={"#ddd"}
-          linearGradient={[ { offset: '0%', color:'#100c09' }, { offset: '100%', color: '#484544' }]}
-          // needleBackgroundColor
-          // markerValueInterval={10}
-          // markerValueColor
-          // strokeLinecap="round"
-        />
+        <Speedgauge value={speed}/>
       </View>
+      <Text style={styles.speed}>{speed.toFixed(1)}</Text>
     </ParallaxScrollView>
   );
 }
@@ -49,4 +40,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
   },
+  speed: {
+    fontSize: 84,
+    fontWeight: '600',
+    textAlign: 'center',
+  }
 });

@@ -1,31 +1,54 @@
-import React from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { Settings, Switch, TextInput, View } from "react-native";
+import { ThemedText } from "@/components/ThemedText";
+import React from "react";
 
-export type SettingsRowProps = {
+type SettingsRowTextProps = {
   label: string | number;
-  value: string | number;
-  setValue: (e: any) => void;
+  dataKey: string;
+  value: any;
+  onSetValue: (e: any) => void;
+  isBoolean?: boolean;
 };
 
-export function SettingsRow({ label, value, setValue }: SettingsRowProps) {
+
+export default function SettingsRow({
+  label,
+  dataKey,
+  value,
+  onSetValue,
+  isBoolean = false
+}: SettingsRowTextProps) {
   return (
     <View
       style={{
-        flexDirection: 'row',
         alignItems: 'center',
-        gap: 20,
+
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+        height: 40
       }}
     >
-      <Text>{label}</Text>
-      <TextInput
-        style={{ height: 30, width: 100 }}
-        value={typeof value === 'number' ? value.toString() : value}
-        onChangeText={(e: any) => setValue(parseInt(e))}
-        keyboardType="numeric"
-        // clearTextOnFocus={true}
-        // clearButtonMode="always"
-        enterKeyHint={'done'}
-      />
+      <ThemedText>{label}</ThemedText>
+      {isBoolean ? (
+        <Switch
+          onValueChange={onSetValue}
+          value={value}
+        />
+      ) : (
+        <TextInput
+          style={{ height: 30, width: 100, textAlign: 'right' }}
+          value={value}
+          onChangeText={(text: string) => {
+            Settings.set({ [dataKey]: text });
+            onSetValue(text);
+          }}
+          keyboardType="numeric"
+          // clearTextOnFocus={true}
+          // clearButtonMode="always"
+          enterKeyHint={'done'}
+        />
+      )}
     </View>
   );
 }
