@@ -1,7 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import Canvas from "react-native-canvas";
-import { Text } from 'react-native';
-import { find_peaks, get_frequency_from_peaks } from "@/app/utils";
 
 type SignalVisualizerProps = {
   signal: number[];
@@ -44,10 +42,10 @@ export default function SignalVisualizer({
         context.lineTo(x, y);
         x += sliceWidth;
       }
-      context.lineTo(x, height / 2);
+      // context.lineTo(x, height / 2);
       context.stroke();
 
-      // draw vertical line
+      // draw vertical lines
       context.beginPath();
       for (const peak of peaks) {
         context.lineWidth = 1;

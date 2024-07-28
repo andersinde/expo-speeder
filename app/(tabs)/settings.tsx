@@ -11,8 +11,9 @@ export default function SettingsScreen() {
   const [sampleRate, setSampleRate] = useState(() => Settings.get('sampleRate'));
   const [bitsPerSample, setBitsPerSample] = useState(() => Settings.get('bitsPerSample'));
   const [bufferSize, setBufferSize] = useState(() => Settings.get('bufferSize'));
-  const [graphSpacing, setGraphSpacing] = useState(() => Settings.get('graphSpacing'));
-  const [copingMode, setCopingMode] = useState<boolean>(false);
+  const [maxGague, setMaxGague] = useState(() => Settings.get('maxGague'));
+  // const [copingMode, setCopingMode] = useState<boolean>(false);
+  const [wheelDiameter, setWheelDiameter] = useState(() => Settings.get('wheelDiameter'));
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const theme = useColorScheme() ?? 'light';
 
@@ -36,10 +37,12 @@ export default function SettingsScreen() {
           <SettingsRow label={"Bits per sample"} dataKey="bitsPerSample" value={bitsPerSample}
                        onSetValue={setBitsPerSample}/>
           <SettingsRow label={"Buffer size"} dataKey="bufferSize" value={bufferSize} onSetValue={setBufferSize}/>
+          <SettingsRow label={"Max gauge"} dataKey="maxGague" value={maxGague} onSetValue={setMaxGague}/>
+          <SettingsRow label={"Wheel diameter"} dataKey="wheelDiameter" value={wheelDiameter}
+                       onSetValue={setWheelDiameter}/>
+
           {/*<SettingsRow label={"Coping mode"} dataKey="copingMode" value={copingMode}*/}
           {/*             onSetValue={setCopingMode} isBoolean/>*/}
-          {/*<SettingsRow label={"Graph spacing"} dataKey="graphSpacing" value={graphSpacing}*/}
-          {/*             onSetValue={setGraphSpacing}/>*/}
           <SettingsRow label={'Dark mode'} dataKey={'darkMode'} value={darkMode} isBoolean
                        onSetValue={(value) => {
                          Appearance.setColorScheme(value ? 'dark' : 'light');

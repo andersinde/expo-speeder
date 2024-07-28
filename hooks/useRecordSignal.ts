@@ -18,13 +18,11 @@ export function useRecordSignal() {
   const bitsPerSample = Settings.get('bitsPerSample');
   const bufferSize = Settings.get('bufferSize');
 
-  const [chunk, setChunk] = useState<Buffer>(Buffer.alloc(0));
-  const [frequency, setFrequency] = useState<number>(0);
+  const [chunk, setChunk] = useState<Uint8Array>(new Uint8Array());
   const isRecordingAllowed = !!sampleRate && !!bitsPerSample && !!bufferSize;
 
   async function startRecording() {
     setRecording(true);
-    // setShowGraph(false);
     console.log('Recording started');
 
     if (permissionResponse?.status !== 'granted') {
@@ -47,7 +45,9 @@ export function useRecordSignal() {
     try {
       LiveAudioStream.init(options);
       LiveAudioStream.on('data', data => { // data is base64-encoded audio data chunks
-        const chunk = Buffer.from(data, 'base64');
+        const buffer = Buffer.from(data, 'base64');
+        let chunk = Uint8Array.from(buffer);
+        chunk = chunk.map((x) => Math.max(0, x - 128 - 10));
         // console.log("chunk:", chunk);
         setChunk(chunk);
       });

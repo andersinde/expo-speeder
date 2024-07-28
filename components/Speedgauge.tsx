@@ -1,9 +1,8 @@
 import React from "react";
 
-import Speedometer, { Arc, Background, Indicator, Marks, Needle, Progress, } from 'react-native-cool-speedometer';
+import Speedometer, { Arc, Background, Marks, Needle, Progress, } from 'react-native-cool-speedometer';
 
-// import { Text } from 'react-native-svg'
-import { ThemedText } from "@/components/ThemedText";
+import { Settings } from "react-native";
 
 type SpeedgaugeProps = {
   value: any;
@@ -12,13 +11,14 @@ type SpeedgaugeProps = {
 export default function Speedgauge({
   value,
 }: SpeedgaugeProps) {
-  const width = 250;
+  // const width = 250;
+  const maxValue = Settings.get('maxGague')
 
   return (
     <Speedometer
       value={value}
       // width={width}
-      max={180}
+      max={maxValue}
       // angle={200}
       fontFamily='squada-one'
       accentColor="#aaa"
@@ -27,7 +27,7 @@ export default function Speedgauge({
       <Arc/>
       <Needle color={"#bbb"}/>
       <Progress/>
-      <Marks/>
+      <Marks step={5}/>
       {/*<Indicator fixValue={true} color={"#000"}/>*/}
       {/*<Indicator fixValue={false}>*/}
       {/*  {(fixedValue, textProps) => (*/}

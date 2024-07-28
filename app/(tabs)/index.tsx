@@ -1,26 +1,30 @@
-import React, { useState } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { Button, Settings, StyleSheet, Text, View } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import Speedgauge from "@/components/Speedgauge";
 import { useRecordSignal } from "@/hooks/useRecordSignal";
+import { get_wheel_speed_kmh } from "@/app/utils";
 
 export default function App() {
-  const [speed, setSpeed] = useState(0);
+  const sampleRate = Settings.get('sampleRate');
 
-  const { stopRecording, startRecording, isRecordingAllowed, recording } = useRecordSignal();
+  const { chunk, stopRecording, startRecording, isRecordingAllowed, recording } = useRecordSignal();
+
+  const speed = get_wheel_speed_kmh(chunk, Settings.get('wheelDiameter'), sampleRate);
+
+  // const [savedData, setSavedData] = useState<float[]>([]);
 
   return (
     <ParallaxScrollView>
-      <Button title="expo-speeder!" onPress={() => setSpeed((speed + 10) % 180)}/>
       <Button
         disabled={!isRecordingAllowed}
         title={recording ? 'Stop recording' : 'Start recording'}
         onPress={recording ? stopRecording : startRecording}
       />
       <View style={styles.container}>
-        <Speedgauge value={speed}/>
+        <Speedgauge value={speed.toFixed(1)}/>
       </View>
-      <Text style={styles.speed}>{speed.toFixed(1)}</Text>
+      <Text style={styles.speed}>{speed.toFixed(1)} km/h</Text>
     </ParallaxScrollView>
   );
 }
@@ -41,7 +45,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   speed: {
-    fontSize: 84,
+    fontSize: 55,
     fontWeight: '600',
     textAlign: 'center',
   }
