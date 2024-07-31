@@ -1,8 +1,3 @@
-/**
- * Learn more about light and dark modes:
- * https://docs.expo.dev/guides/color-schemes/
- */
-
 import { Settings, } from 'react-native';
 import { useState } from "react";
 import { Audio } from "expo-av";
@@ -47,8 +42,7 @@ export function useRecordSignal() {
       LiveAudioStream.on('data', data => { // data is base64-encoded audio data chunks
         const buffer = Buffer.from(data, 'base64');
         let chunk = Uint8Array.from(buffer);
-        chunk = chunk.map((x) => Math.max(0, x - 128 - 10));
-        // console.log("chunk:", chunk);
+        // chunk = chunk.map((x) => Math.max(0, x - 128 - 10));
         setChunk(chunk);
       });
       LiveAudioStream.start();

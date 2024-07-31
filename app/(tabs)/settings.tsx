@@ -12,7 +12,8 @@ export default function SettingsScreen() {
   const [bitsPerSample, setBitsPerSample] = useState(() => Settings.get('bitsPerSample'));
   const [bufferSize, setBufferSize] = useState(() => Settings.get('bufferSize'));
   const [maxGague, setMaxGague] = useState(() => Settings.get('maxGague'));
-  // const [copingMode, setCopingMode] = useState<boolean>(false);
+  const [peakThreshold, setPeakThreshold] = useState(() => Settings.get('peakThreshold') || 128+10);
+  const [copingMode, setCopingMode] = useState<boolean>(false);
   const [wheelDiameter, setWheelDiameter] = useState(() => Settings.get('wheelDiameter'));
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const theme = useColorScheme() ?? 'light';
@@ -30,7 +31,6 @@ export default function SettingsScreen() {
             padding: 10,
             // marginLeft: 0,
             gap: 1,
-
           }}
         >
           <SettingsRow label={"Sample rate"} dataKey="sampleRate" value={sampleRate} onSetValue={setSampleRate}/>
@@ -38,11 +38,11 @@ export default function SettingsScreen() {
                        onSetValue={setBitsPerSample}/>
           <SettingsRow label={"Buffer size"} dataKey="bufferSize" value={bufferSize} onSetValue={setBufferSize}/>
           <SettingsRow label={"Max gauge"} dataKey="maxGague" value={maxGague} onSetValue={setMaxGague}/>
+          <SettingsRow label={"Peak threshold"} dataKey="peakThreshold" value={peakThreshold} onSetValue={setPeakThreshold}/>
           <SettingsRow label={"Wheel diameter"} dataKey="wheelDiameter" value={wheelDiameter}
                        onSetValue={setWheelDiameter}/>
-
-          {/*<SettingsRow label={"Coping mode"} dataKey="copingMode" value={copingMode}*/}
-          {/*             onSetValue={setCopingMode} isBoolean/>*/}
+          <SettingsRow label={"Coping mode"} dataKey="copingMode" value={copingMode}
+                       onSetValue={setCopingMode} isBoolean/>
           <SettingsRow label={'Dark mode'} dataKey={'darkMode'} value={darkMode} isBoolean
                        onSetValue={(value) => {
                          Appearance.setColorScheme(value ? 'dark' : 'light');

@@ -7,10 +7,11 @@ import { get_wheel_speed_kmh } from "@/app/utils";
 
 export default function App() {
   const sampleRate = Settings.get('sampleRate');
+  const peakThreshold = Settings.get('peakThreshold');
 
   const { chunk, stopRecording, startRecording, isRecordingAllowed, recording } = useRecordSignal();
 
-  const speed = get_wheel_speed_kmh(chunk, Settings.get('wheelDiameter'), sampleRate);
+  const speed = get_wheel_speed_kmh(chunk, Settings.get('wheelDiameter'), sampleRate, peakThreshold);
 
   // const [savedData, setSavedData] = useState<float[]>([]);
 

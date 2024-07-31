@@ -10,10 +10,11 @@ export default function SignalPage() {
 
   const [showGraph, setShowGraph] = useState<boolean>(false);
   const sampleRate = Settings.get('sampleRate');
+  const peakThreshold = Settings.get('peakThreshold');
 
   const { chunk, stopRecording, startRecording, isRecordingAllowed, recording } = useRecordSignal();
 
-  const peaks = find_peaks(chunk, 10)
+  const peaks = find_peaks(chunk, peakThreshold);
 
   return (
     <ParallaxScrollView>
@@ -38,10 +39,6 @@ export default function SignalPage() {
         title={"Log data"}
         onPress={() => {
           console.log(chunk);
-          // const fft = new FFT(chunk.length);
-          // let output = new Float32Array(chunk.length);
-          // fft.realTransform(output, chunk)
-          // console.log("fft:", fft);
         }}
       />
       {showGraph ? (
