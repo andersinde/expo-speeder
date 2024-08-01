@@ -12,7 +12,7 @@ export default function Speedgauge({
   value,
 }: SpeedgaugeProps) {
   // const width = 250;
-  const maxValue = Settings.get('maxGague')
+  const maxValue = Settings.get('maxGauge')
 
   return (
     <Speedometer

@@ -24,7 +24,7 @@ export const average_distance_between_peaks = (indices: number[]) => {
     distances.push(indices[i] - indices[i-1]);
   }
   const mean_distance = distances.reduce((a, b) => a + b, 0) / distances.length;
-  return { mean_distance, std: distances.reduce((a, b) => a + Math.pow(b - mean_distance, 2), 0) / distances.length };
+  return { mean_distance }; //, std: distances.reduce((a, b) => a + Math.pow(b - mean_distance, 2), 0) / distances.length };
 }
 
 export const get_frequency_from_peaks = (peaks: number[], sampleRate: number) => {
@@ -39,5 +39,5 @@ export const get_frequency_from_peaks = (peaks: number[], sampleRate: number) =>
 export const get_wheel_speed_kmh = (chunk: any, wheel_diameter: number, sampleRate: number, peakThreshold: number) => {
   const peaks = find_peaks(chunk, peakThreshold);
   const frequency = get_frequency_from_peaks(peaks, sampleRate);
-  return frequency * Math.PI * wheel_diameter/1000 * 3.6 / 1;  // (two magnets)
+  return frequency * Math.PI * wheel_diameter/1000 * 3.6;
 }

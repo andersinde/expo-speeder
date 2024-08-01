@@ -4,7 +4,7 @@ import { Audio } from "expo-av";
 import { Buffer } from "buffer";
 import LiveAudioStream from "react-native-live-audio-stream";
 
-export function useRecordSignal() {
+export function useRecordSignal(onReceiveChunk: (chunk: Uint8Array) => void) {
 
   const [recording, setRecording] = useState<boolean>(false);
   const [permissionResponse, requestPermission] = Audio.usePermissions();
@@ -44,6 +44,7 @@ export function useRecordSignal() {
         let chunk = Uint8Array.from(buffer);
         // chunk = chunk.map((x) => Math.max(0, x - 128 - 10));
         setChunk(chunk);
+        onReceiveChunk(chunk);
       });
       LiveAudioStream.start();
     } catch (err) {
@@ -56,5 +57,5 @@ export function useRecordSignal() {
     await LiveAudioStream.stop();
   }
 
-  return { chunk, startRecording, stopRecording, recording, isRecordingAllowed }
+  return { chunk, startRecording, stopRecording, recording, isRecordingAllowed, onReceiveChunk }
 }

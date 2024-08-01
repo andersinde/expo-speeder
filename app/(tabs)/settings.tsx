@@ -11,7 +11,7 @@ export default function SettingsScreen() {
   const [sampleRate, setSampleRate] = useState(() => Settings.get('sampleRate'));
   const [bitsPerSample, setBitsPerSample] = useState(() => Settings.get('bitsPerSample'));
   const [bufferSize, setBufferSize] = useState(() => Settings.get('bufferSize'));
-  const [maxGague, setMaxGague] = useState(() => Settings.get('maxGague'));
+  const [maxGauge, setMaxGauge] = useState(() => Settings.get('maxGauge'));
   const [peakThreshold, setPeakThreshold] = useState(() => Settings.get('peakThreshold') || 128+10);
   const [copingMode, setCopingMode] = useState<boolean>(false);
   const [wheelDiameter, setWheelDiameter] = useState(() => Settings.get('wheelDiameter'));
@@ -37,7 +37,7 @@ export default function SettingsScreen() {
           <SettingsRow label={"Bits per sample"} dataKey="bitsPerSample" value={bitsPerSample}
                        onSetValue={setBitsPerSample}/>
           <SettingsRow label={"Buffer size"} dataKey="bufferSize" value={bufferSize} onSetValue={setBufferSize}/>
-          <SettingsRow label={"Max gauge"} dataKey="maxGague" value={maxGague} onSetValue={setMaxGague}/>
+          <SettingsRow label={"Max gauge"} dataKey="maxGauge" value={maxGauge} onSetValue={setMaxGauge}/>
           <SettingsRow label={"Peak threshold"} dataKey="peakThreshold" value={peakThreshold} onSetValue={setPeakThreshold}/>
           <SettingsRow label={"Wheel diameter"} dataKey="wheelDiameter" value={wheelDiameter}
                        onSetValue={setWheelDiameter}/>
