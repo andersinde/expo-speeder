@@ -2,35 +2,20 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { Settings } from "react-native";
 
 export default function TabLayout() {
   // https://icons.expo.fyi/Index for list of icons
 
-  const colorScheme = useColorScheme();
-
-  // set all the default settings here
-  // React.useEffect(() => {
-  //   Settings.set({ sampleRate: 32000 });
-  //   Settings.set({ bitsPerSample: 8 });
-  //   Settings.set({ bufferSize: 2048 });
-  //   Settings.set({ maxGauge: 100 });
-  //   Settings.set({ peakThreshold: 128+20 });
-  //   Settings.set({ copingMode: false });
-  //   Settings.set({ wheelDiameter: 80 });
-  //   Settings.set({ darkMode: false });
-  //   console.log("Settings initialized?");
-  // }, []);
-
   return (
+    // <SafeAreaView style={{flex: 1}}>
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        tabBarActiveBackgroundColor: Colors[colorScheme ?? 'light'].background,
-        tabBarInactiveBackgroundColor: Colors[colorScheme ?? 'light'].background,
+        tabBarStyle: { height: 75 },
+        tabBarShowLabel: false,
+        // tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        // tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        // tabBarActiveBackgroundColor: Colors[colorScheme ?? 'light'].background,
+        // tabBarInactiveBackgroundColor: Colors[colorScheme ?? 'light'].background,
         headerShown: false,
       }}>
       <Tabs.Screen
@@ -52,14 +37,23 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="signal"
+        name="bluetooth"
         options={{
-          title: 'Signal',
+          title: 'Bluetooth',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'ear' : 'ear-outline'} color={color}/>
+            <TabBarIcon name={focused ? 'bluetooth' : 'bluetooth-outline'} color={color}/>
           ),
         }}
       />
+      {/*<Tabs.Screen*/}
+      {/*  name="signal"*/}
+      {/*  options={{*/}
+      {/*    title: 'Signal',*/}
+      {/*    tabBarIcon: ({ color, focused }) => (*/}
+      {/*      <TabBarIcon name={focused ? 'ear' : 'ear-outline'} color={color}/>*/}
+      {/*    ),*/}
+      {/*  }}*/}
+      {/*/>*/}
       <Tabs.Screen
         name="settings"
         options={{
@@ -70,5 +64,6 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    // </SafeAreaView>
   );
 }

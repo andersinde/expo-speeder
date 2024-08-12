@@ -4,18 +4,42 @@ import React, { useState } from "react";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import SettingsRow from "@/components/SettingsRow";
 import { ThemedView } from "@/components/ThemedView";
+import { BlueButton } from "@/components/BlueButton";
 
+interface AppSettings {
+  sampleRate: number;
+  bitsPerSample: number;
+  bufferSize: number;
+  maxGauge: number;
+  peakThreshold: number;
+  copingMode: boolean;
+  wheelDiameter: number;
+  darkMode: boolean;
+}
+
+const defaultSettings: AppSettings = {
+  sampleRate: 12000,
+  bitsPerSample: 8,
+  bufferSize: 4096,
+  maxGauge: 100,
+  peakThreshold: 128 + 10,
+  copingMode: false,
+  wheelDiameter: 80,
+  darkMode: false,
+};
 
 export default function SettingsScreen() {
 
-  const [sampleRate, setSampleRate] = useState(() => Settings.get('sampleRate'));
-  const [bitsPerSample, setBitsPerSample] = useState(() => Settings.get('bitsPerSample'));
-  const [bufferSize, setBufferSize] = useState(() => Settings.get('bufferSize'));
-  const [maxGauge, setMaxGauge] = useState(() => Settings.get('maxGauge'));
-  const [peakThreshold, setPeakThreshold] = useState(() => Settings.get('peakThreshold') || 128+10);
-  const [copingMode, setCopingMode] = useState<boolean>(false);
-  const [wheelDiameter, setWheelDiameter] = useState(() => Settings.get('wheelDiameter'));
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+  // initialize settings with default values if they don't exist
+  const [sampleRate, setSampleRate] = useState<number>(() => Settings.get('sampleRate') || defaultSettings.sampleRate);
+  const [bitsPerSample, setBitsPerSample] = useState<number>(() => Settings.get('bitsPerSample') ?? defaultSettings.bitsPerSample);
+  const [bufferSize, setBufferSize] = useState<number>(() => Settings.get('bufferSize') ?? defaultSettings.bufferSize);
+  const [maxGauge, setMaxGauge] = useState<number>(() => Settings.get('maxGauge') ?? defaultSettings.maxGauge);
+  const [peakThreshold, setPeakThreshold] = useState<number>(() => Settings.get('peakThreshold') ?? defaultSettings.peakThreshold);
+  const [copingMode, setCopingMode] = useState<boolean>(() => Settings.get('copingMode') ?? defaultSettings.copingMode);
+  const [wheelDiameter, setWheelDiameter] = useState<number>(() => Settings.get('wheelDiameter') ?? defaultSettings.wheelDiameter);
+  const [darkMode, setDarkMode] = useState<boolean>(() => Settings.get('darkMode') ?? defaultSettings.darkMode);
+
   const theme = useColorScheme() ?? 'light';
 
   return (
@@ -33,12 +57,12 @@ export default function SettingsScreen() {
             gap: 1,
           }}
         >
-          <SettingsRow label={"Sample rate"} dataKey="sampleRate" value={sampleRate} onSetValue={setSampleRate}/>
-          <SettingsRow label={"Bits per sample"} dataKey="bitsPerSample" value={bitsPerSample}
-                       onSetValue={setBitsPerSample}/>
-          <SettingsRow label={"Buffer size"} dataKey="bufferSize" value={bufferSize} onSetValue={setBufferSize}/>
-          <SettingsRow label={"Max gauge"} dataKey="maxGauge" value={maxGauge} onSetValue={setMaxGauge}/>
-          <SettingsRow label={"Peak threshold"} dataKey="peakThreshold" value={peakThreshold} onSetValue={setPeakThreshold}/>
+          {/*<SettingsRow label={"Sample rate"} dataKey="sampleRate" value={sampleRate} onSetValue={setSampleRate}/>*/}
+          {/*<SettingsRow label={"Bits per sample"} dataKey="bitsPerSample" value={bitsPerSample}*/}
+          {/*             onSetValue={setBitsPerSample}/>*/}
+          {/*<SettingsRow label={"Buffer size"} dataKey="bufferSize" value={bufferSize} onSetValue={setBufferSize}/>*/}
+          {/*<SettingsRow label={"Max gauge"} dataKey="maxGauge" value={maxGauge} onSetValue={setMaxGauge}/>*/}
+          {/*<SettingsRow label={"Peak threshold"} dataKey="peakThreshold" value={peakThreshold} onSetValue={setPeakThreshold}/>*/}
           <SettingsRow label={"Wheel diameter"} dataKey="wheelDiameter" value={wheelDiameter}
                        onSetValue={setWheelDiameter}/>
           <SettingsRow label={"Coping mode"} dataKey="copingMode" value={copingMode}
@@ -51,6 +75,13 @@ export default function SettingsScreen() {
           />
         </ThemedView>
       </KeyboardAvoidingView>
+      <BlueButton
+        title="Restore to default"
+        onPress={() => {
+          // Settings.set(defaultSettings);
+          console.log(Settings.get("peakThreshold"));
+        }}
+      />
     </ParallaxScrollView>
   );
 }

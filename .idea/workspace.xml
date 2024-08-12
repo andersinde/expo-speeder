@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d786f797-e5a0-41bb-b95e-1d669758be40" name="Changes" comment="uiCleanup">
+      <change afterPath="$PROJECT_DIR$/app/(tabs)/bluetooth.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/_layout.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/BlueButton.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hooks/useBluetooth.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(tabs)/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(tabs)/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(tabs)/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(tabs)/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(tabs)/log.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(tabs)/log.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(tabs)/settings.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(tabs)/settings.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(tabs)/signal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(tabs)/signal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/SignalVisualizer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/SignalVisualizer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/node_modules/react-native-ble-manager/src/index.ts" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2jYXWMPqLtH7Z9EYeObqUdj8WdT" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/andersinde/Library/CloudStorage/Dropbox/hugo100/speedometer/expo-speeder/app",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "AndroidSdkUpdater",
+    "ts.external.directory.path": "/Users/andersinde/Library/CloudStorage/Dropbox/hugo100/speedometer/expo-speeder/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "TypeScript JSX",
+      "JSON"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app" />
+      <recent name="$PROJECT_DIR$/hooks" />
+      <recent name="$PROJECT_DIR$/components" />
+      <recent name="$PROJECT_DIR$/app/(tabs)" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/components" />
+      <recent name="$PROJECT_DIR$/app/(tabs)" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.17890.1" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.17890.1" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d786f797-e5a0-41bb-b95e-1d669758be40" name="Changes" comment="" />
+      <created>1721565015347</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1721565015347</updated>
+      <workItem from="1721565018149" duration="88000" />
+      <workItem from="1721565869308" duration="80000" />
+      <workItem from="1721576453959" duration="39152000" />
+      <workItem from="1721981270490" duration="21399000" />
+      <workItem from="1722167827224" duration="22277000" />
+      <workItem from="1722244762908" duration="3854000" />
+      <workItem from="1722252993522" duration="1728000" />
+      <workItem from="1722457274535" duration="178000" />
+      <workItem from="1722462906756" duration="37000" />
+      <workItem from="1722465974541" duration="12795000" />
+      <workItem from="1722527591365" duration="1106000" />
+      <workItem from="1722598586506" duration="2602000" />
+      <workItem from="1722602719568" duration="29000" />
+      <workItem from="1722795754370" duration="9238000" />
+      <workItem from="1722849051942" duration="25269000" />
+      <workItem from="1722882064407" duration="4655000" />
+      <workItem from="1722951171692" duration="6392000" />
+      <workItem from="1723128420665" duration="3927000" />
+      <workItem from="1723478189930" duration="4489000" />
+    </task>
+    <task id="LOCAL-00001" summary="big wip">
+      <option name="closed" value="true" />
+      <created>1721980779631</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1721980779631</updated>
+    </task>
+    <task id="LOCAL-00002" summary="move recording stuff to hook">
+      <option name="closed" value="true" />
+      <created>1722188150446</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1722188150446</updated>
+    </task>
+    <task id="LOCAL-00003" summary="add more utils">
+      <option name="closed" value="true" />
+      <created>1722209112929</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1722209112931</updated>
+    </task>
+    <task id="LOCAL-00004" summary="[no message]">
+      <option name="closed" value="true" />
+      <created>1722466281912</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1722466281912</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Add storage to save sessions locally">
+      <option name="closed" value="true" />
+      <created>1722506276469</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1722506276469</updated>
+    </task>
+    <task id="LOCAL-00006" summary="uiCleanup">
+      <option name="closed" value="true" />
+      <created>1723482511084</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1723482511084</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="big wip" />
+    <MESSAGE value="move recording stuff to hook" />
+    <MESSAGE value="add more utils" />
+    <MESSAGE value="[no message]" />
+    <MESSAGE value="Add storage to save sessions locally" />
+    <MESSAGE value="uiCleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="uiCleanup" />
+  </component>
+</project>

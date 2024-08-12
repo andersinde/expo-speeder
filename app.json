@@ -2,7 +2,7 @@
   "expo": {
     "name": "expo-speeder",
     "slug": "expo-speeder",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -39,6 +39,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "f8a20ef0-fb86-4fc6-ada2-dee9951fa54f"
+      }
     }
   }
 }
