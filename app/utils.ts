@@ -36,8 +36,12 @@ export const get_frequency_from_peaks = (peaks: number[], sampleRate: number) =>
   return sampleRate / mean_distance;  // 1/s  *  [-]
 }
 
-export const get_wheel_speed_kmh = (chunk: any, wheel_diameter: number, sampleRate: number, peakThreshold: number) => {
+export const get_wheel_speed_mps = (chunk: any, wheel_diameter: number, sampleRate: number, peakThreshold: number) => {
   const peaks = find_peaks(chunk, peakThreshold);
   const frequency = get_frequency_from_peaks(peaks, sampleRate);
-  return frequency * Math.PI * wheel_diameter/1000 * 3.6;
+  return frequency * wheel_diameter/1000 * Math.PI; // [Hz] * [m] = [m/s]
+}
+
+export const get_wheel_speed_kmh = (chunk: any, wheel_diameter: number, sampleRate: number, peakThreshold: number) => {
+  return get_wheel_speed_mps(chunk, wheel_diameter, sampleRate, peakThreshold) * 3.6;
 }
