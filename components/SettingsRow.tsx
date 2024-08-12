@@ -1,6 +1,7 @@
-import { Settings, Switch, TextInput, View } from "react-native";
+import { Settings, Switch, View } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import React from "react";
+import { ThemedTextInput } from "@/components/ThemedTextInput";
 
 type SettingsRowTextProps = {
   label: string | number;
@@ -9,7 +10,6 @@ type SettingsRowTextProps = {
   onSetValue: (e: any) => void;
   isBoolean?: boolean;
 };
-
 
 export default function SettingsRow({
   label,
@@ -36,7 +36,7 @@ export default function SettingsRow({
           value={value}
         />
       ) : (
-        <TextInput
+        <ThemedTextInput
           style={{ height: 30, width: 100, textAlign: 'right' }}
           value={value}
           onChangeText={(text: string) => {
