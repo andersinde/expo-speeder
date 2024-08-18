@@ -1,12 +1,13 @@
 import React from 'react';
 import { Button, StyleSheet, } from 'react-native';
-import ParallaxScrollView from "@/components/ParallaxScrollView";
+import ThemedScrollView from "@/components/ThemedScrollView";
 import { DeviceList } from "@/components/DeviceList";
 import { ThemedText } from "@/components/ThemedText";
 import { useBluetooth } from "@/hooks/useBluetooth";
 import { BlueButton } from "@/components/BlueButton";
+import { ThemedView } from "@/components/ThemedView";
 
-export default function BluetoothPage() {
+function BluetoothPage() {
 
   const {
     discoveredDevices,
@@ -14,42 +15,45 @@ export default function BluetoothPage() {
     isScanning,
     startScan,
     stopScan,
-    connectToPeripheral,
     disconnectFromPeripheral,
-    read,
-    data
+    connectToPeripheral,
+    sensorValue,
   } = useBluetooth();
 
   return (
-    <ParallaxScrollView>
-      <BlueButton
-        title={isScanning ? 'Stop scanning' : 'Scan Bluetooth Devices'}
-        onPress={isScanning ? stopScan : startScan}
-      />
-      {discoveredDevices.length > 0 && isScanning ?
-        discoveredDevices.map((item) => (
-            <DeviceList
-              peripheral={item}
-              connect={connectToPeripheral}
-              disconnect={disconnectFromPeripheral}
-              key={item.id}
-            />
-          )
-        ) : null}
-      <ThemedText>Connected Device:</ThemedText>
-      {connectedDevice ? (
-        <DeviceList
-          peripheral={connectedDevice}
-          connect={connectToPeripheral}
-          disconnect={disconnectFromPeripheral}
-          key={connectedDevice.id}
+    <>
+      <ThemedScrollView>
+        {discoveredDevices.length > 0 && isScanning ?
+          discoveredDevices.map((item) => (
+              <DeviceList
+                peripheral={item}
+                connect={connectToPeripheral}
+                disconnect={disconnectFromPeripheral}
+                key={item.id}
+              />
+            )
+          ) : null}
+        <ThemedText>Connected Device:</ThemedText>
+        {connectedDevice ? (
+          <DeviceList
+            peripheral={connectedDevice}
+            connect={connectToPeripheral}
+            disconnect={disconnectFromPeripheral}
+            key={connectedDevice.id}
+          />
+        ) : (
+          <ThemedText style={styles.noDevicesText}>No connected device</ThemedText>
+        )}
+        <ThemedText>{sensorValue}</ThemedText>
+      </ThemedScrollView>
+      <ThemedView style={styles.scanButton}>
+        <BlueButton
+          title={isScanning ? 'Stop scanning' : 'Scan Bluetooth Devices'}
+          onPress={isScanning ? stopScan : startScan}
+          style={{ padding: 22 }}
         />
-      ) : (
-        <ThemedText style={styles.noDevicesText}>No connected devices</ThemedText>
-      )}
-      <Button disabled={!connectedDevice} title="Read data" onPress={read}/>
-      <ThemedText>{data}</ThemedText>
-    </ParallaxScrollView>
+      </ThemedView>
+    </>
   );
 };
 
@@ -59,4 +63,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontStyle: 'italic',
   },
+  scanButton: {
+    padding: 16,
+    paddingBottom: 24
+  }
 });

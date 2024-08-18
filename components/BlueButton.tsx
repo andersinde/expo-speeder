@@ -6,32 +6,31 @@ interface BlueButtonProps {
   title: string;
   onPress: () => void;
   style?: any;
+  disabled?: boolean;
 }
 
-export const BlueButton = ({ onPress, title, style }: BlueButtonProps) => {
+export const BlueButton = ({ onPress, title, style, disabled }: BlueButtonProps) => {
   return (
-    <TouchableOpacity onPress={onPress} style={{ ...styles.scanButton, ...style }}>
-      <ThemedText style={styles.scanButtonText}>{title}</ThemedText>
+    <TouchableOpacity
+      onPress={onPress}
+      style={{ ...styles.button, ...style }}
+      disabled={disabled}>
+      <ThemedText style={styles.buttonText}>{title}</ThemedText>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  scanButton: {
+  button: {
     backgroundColor: '#2196F3',
     padding: 10,
     borderRadius: 5,
-    marginBottom: 20,
   },
-  scanButtonText: {
+  scanButtonDisabled: {
+    backgroundColor: '#ccf',
+  },
+  buttonText: {
     color: 'white',
     textAlign: 'center',
-  },
-  deviceButton: {
-    backgroundColor: '#2196F3',
-    padding: 8,
-    borderRadius: 5,
-    marginBottom: 20,
-    paddingHorizontal: 20,
   },
 });

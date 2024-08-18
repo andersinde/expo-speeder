@@ -1,9 +1,14 @@
-import { Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { Button, StyleSheet, useColorScheme } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from "react";
-import { ThemedText } from "@/components/ThemedText";
-import { format } from "date-fns";
-import { ThemedView } from "@/components/ThemedView";
+import { SessionRow } from "@/components/SessionRow";
+import { SessionEntryScreen } from "@/components/SessionEntryScreen";
+import { DarkTheme, NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ThemedScrollView from "@/components/ThemedScrollView";
+import { Colors } from "@/constants/Colors";
+
+const Stack = createNativeStackNavigator();
 
 export interface LogEntry {
   date: string;
@@ -11,21 +16,23 @@ export interface LogEntry {
   wheelDiameter: number;
 }
 
-const SessionRow = ({ log }: { log: LogEntry }) => {
-  console.log("log", log);
-  return (
-    <TouchableOpacity onPress={() => {
-    }} style={{ margin: 2, padding: 16, backgroundColor: "#e5e5e5" }}>
-      <ThemedText>{format(log.date, 'yyyy-MM-dd hh:mm')}</ThemedText>
-      <ThemedText>Max speed: {Math.max(...log.frequencies).toFixed(2)}</ThemedText>
-    </TouchableOpacity>
-  );
+const EXAMPLE_LOG_ENTRY = {
+  date: '2021-09-01T12:00:00.000Z',
+  frequencies: [1, 2, 3, 4, 5],
+  wheelDiameter: 80,
 }
 
-export default function LogScreen() {
+// @ts-ignore
+const LogView = ({ navigation }) => {
 
   const [logs, setLogs] = React.useState<LogEntry[]>([]);
+  // const logs = [EXAMPLE_LOG_ENTRY, EXAMPLE_LOG_ENTRY, EXAMPLE_LOG_ENTRY, EXAMPLE_LOG_ENTRY, EXAMPLE_LOG_ENTRY, EXAMPLE_LOG_ENTRY, EXAMPLE_LOG_ENTRY
+  // , EXAMPLE_LOG_ENTRY, EXAMPLE_LOG_ENTRY, EXAMPLE_LOG_ENTRY, EXAMPLE_LOG_ENTRY, EXAMPLE_LOG_ENTRY, EXAMPLE_LOG_ENTRY, EXAMPLE_LOG_ENTRY];
   const [refreshing, setRefreshing] = React.useState(false);
+
+  // React.useEffect(() => {
+  //   getAllLogs();
+  // }, []);
 
   const getAllLogs = async () => {
     setRefreshing(true);
@@ -50,38 +57,47 @@ export default function LogScreen() {
     setLogs(newLogs);
   }
 
-  const deleteAllKeys = async () => {
-    try {
-      await AsyncStorage.clear()
-    } catch (e) {
-    }
-  }
-
   return (
-    <ThemedView>
-      <Button title={'Get all'} onPress={getAllLogs}/>
-      <Button title={'Delete all'} onPress={deleteAllKeys}/>
-      {logs.length === 0 ? <ThemedText>No logs</ThemedText> : null}
-      <FlatList
-        data={logs}
-        renderItem={({ item }) => <SessionRow log={item}/>}
-        keyExtractor={item => item.date}
-        onRefresh={getAllLogs}
-        refreshing={refreshing}
-      />
-    </ThemedView>
+    <ThemedScrollView style={{padding: 0, paddingTop: 0}}>
+      {logs.map((log) => <SessionRow key={log.date} log={log} navigation={navigation}/>)}
+      {/*({ item }) => <SessionRow log={item} navigation={navigation}/>}*!/*/}
+      {/*<FlatList*/}
+      {/*  data={logs}*/}
+      {/*  renderItem={({ item }) => <SessionRow log={item} navigation={navigation}/>}*/}
+      {/*  keyExtractor={item => item.date}*/}
+      {/*  onRefresh={getAllLogs}*/}
+      {/*  refreshing={refreshing}*/}
+      {/*/>*/}
+      <Button title={'Load data'} onPress={getAllLogs}/>
+    </ThemedScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-});
+export default function LogBaseView() {
+  const theme = useColorScheme() ?? 'light';
+  return (
+    <NavigationContainer independent>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Logs"
+          component={LogView}
+          options={{
+            // headerShown: false,
+            headerRight: () => (
+              <Button color="#f55" title={'Delete all'} onPress={async () => {
+                await AsyncStorage.clear();
+              }}/>
+            ),
+            headerStyle: {
+              backgroundColor: theme === 'light' ? Colors.light.background : DarkTheme.colors.card
+          },
+            headerTitleStyle: {
+              color: theme === 'light' ? Colors.light.text : Colors.dark.text
+            },
+          }}
+        />
+        <Stack.Screen name="SessionEntryScreen" component={SessionEntryScreen}/>
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}

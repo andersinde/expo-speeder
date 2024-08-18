@@ -1,52 +1,59 @@
-import { Alert, NativeEventEmitter, NativeModules, } from 'react-native';
-import React, { useState } from "react";
+import { Alert, Settings, } from 'react-native';
+import React, { useContext, useState } from "react";
 import BleManager from "react-native-ble-manager";
 import { Peripheral as RNPeripheral } from "react-native-ble-manager/dist/esm/types";
+import { BlueToothContext } from "@/app/_layout";
 
 const SERVICE_UUID = '0000aadb-0000-1000-8000-00805f9b34fb';
 const CHARACTERISTIC_UUID = '0000aadc-0000-1000-8000-00805f9b34fb';
+const DEVICE_PREFIX = 'Pico';
 
 interface Peripheral extends RNPeripheral {
   connected?: boolean;
 }
 
-const BleManagerModule = NativeModules.BleManager;
-const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
-
-export function useBluetooth() {
+export function useBluetooth(onReceiveData?: (value: any, tx_id: number) => void) {
 
   const peripherals = new Map<string, Peripheral>();
   const [isScanning, setIsScanning] = useState(false);
   const [connectedDevice, setConnectedDevice] = useState<Peripheral | null>(null);
   const [discoveredDevices, setDiscoveredDevices] = useState<Peripheral[]>([]);
-  const [data, setData] = useState<string | null>(null);
+  const [savedRecording, setSavedRecording] = useState<number[]>([]);
+  const [isRecording, setIsRecording] = useState(false);
+
+  const { sensorValue, setSensorValue, BleManagerEmitter } = useContext(BlueToothContext);
 
   React.useEffect(() => {
     BleManager.start({ showAlert: true })
 
     let stopDiscoverListener = BleManagerEmitter.addListener(
       'BleManagerDiscoverPeripheral',
-      peripheral => {
+      (peripheral: Peripheral) => {
+        console.log("BleManagerDiscoverPeripheral");
         peripherals.set(peripheral.id, peripheral);
-        setDiscoveredDevices(Array.from(peripherals.values()));
-        if (peripheral.name === "mpy-uart") {
-          connectToPeripheral(peripheral);
-        }
+        setDiscoveredDevices(Array.from(peripherals.values())
+          .filter(p => p.name && p.name.startsWith(DEVICE_PREFIX)));
       },
     );
+
+    let disconnectListener = BleManagerEmitter
+      .addListener('BleManagerDisconnectPeripheral', peripheral => console.log("Disconnected from", peripheral.name));
 
     let stopConnectListener = BleManagerEmitter
       .addListener('BleManagerConnectPeripheral', peripheral => console.log('BleManagerConnectPeripheral:', peripheral));
 
-    let stopScanListener = BleManagerEmitter.addListener(
-      'BleManagerStopScan',
-      () => setIsScanning(false),
-    );
+    // let stopScanListener = BleManagerEmitter
+    //   .addListener('BleManagerStopScan', () => setIsScanning(false));
+    //
+    // let updateStateListener = BleManagerEmitter
+    //   .addListener('BleManagerDidUpdateState', (value) => console.log("BleManagerDidUpdateState", value));
 
     return () => {
       stopDiscoverListener.remove();
       stopConnectListener.remove();
-      stopScanListener.remove();
+      // stopScanListener.remove();
+      disconnectListener.remove();
+      // updateStateListener.remove();
     };
   }, []);
 
@@ -74,24 +81,8 @@ export function useBluetooth() {
       });
   }
 
-  const connectToPeripheral = (peripheral: Peripheral) => {
-    console.log('connecting to', peripheral.name, peripheral.id);
-
-    BleManager.connect(peripheral.id)
-      .then(() => {
-        peripheral.connected = true;
-        peripherals.set(peripheral.id, peripheral);
-        setConnectedDevice(peripheral);
-        setDiscoveredDevices(Array.from(peripherals.values()));
-        console.log('BLE device paired successfully');
-      })
-      .catch((e) => {
-        console.log('Failed to connect', e);
-      });
-  };
-
   const disconnectFromPeripheral = (peripheral: Peripheral) => {
-    setData(null);
+    setSensorValue(null);
     BleManager.disconnect(peripheral.id)
       .then(() => {
         peripheral.connected = false;
@@ -103,27 +94,41 @@ export function useBluetooth() {
       });
   };
 
-  const read = () => {
-    stopScan();
-    if (!connectedDevice) {
-      return;
+  const connectToPeripheral = (peripheral: Peripheral) => {
+    Settings.set({ "preferredDeviceId": peripheral.id });
+
+    if (isScanning) {
+      stopScan();
     }
-    BleManager.connect(connectedDevice.id)
+    console.log('read from', peripheral.id);
+    BleManager.connect(peripheral.id)
       .then(() => {
-        console.log('connected');
-        return BleManager.retrieveServices(connectedDevice.id);
+        console.log('(read) connected to deviceId');
+        return BleManager.retrieveServices(peripheral.id);
       })
-      .then(() => {
-        console.log('retrieveServices');
-        return BleManager.startNotification(connectedDevice.id, SERVICE_UUID, CHARACTERISTIC_UUID);
-      })
+      .then(() => BleManager.startNotification(peripheral.id, SERVICE_UUID, CHARACTERISTIC_UUID))
       .then(() => {
         return BleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', (data) => {
-          // setData(bytesToString(data.value));
-          console.log('data', data.value, String.fromCharCode(...data.value));
+          const value = String.fromCharCode(...data.value);
+          const frequency = Number(value.split("_")[0]);
+          const tx_id = Number(value.split("_")[1]);
+          setSensorValue(frequency);
+          onReceiveData?.(frequency, tx_id);
+          setConnectedDevice(peripheral);
+          peripheral.connected = true;
+          setSavedRecording(prevSavedRecording => [...prevSavedRecording, frequency]);
         })
       })
       .catch((error) => Alert.alert('Error: ' + error));
+  }
+
+  const startRecording = () => {
+    setSavedRecording([]);
+    setIsRecording(true);
+  }
+
+  const stopRecording = () => {
+    setIsRecording(false);
   }
 
   return {
@@ -132,9 +137,12 @@ export function useBluetooth() {
     isScanning,
     startScan,
     stopScan,
-    connectToPeripheral,
     disconnectFromPeripheral,
-    read,
-    data
+    connectToPeripheral,
+    sensorValue,
+    startRecording,
+    stopRecording,
+    isRecording,
+    savedRecording
   };
 }

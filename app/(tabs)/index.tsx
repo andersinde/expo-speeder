@@ -1,46 +1,60 @@
 import React from 'react';
-import { Button, Settings, StyleSheet, Text, View } from 'react-native';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import Speedgauge from "@/components/Speedgauge";
-import { useRecordSignal } from "@/hooks/useRecordSignal";
-import { get_wheel_speed_kmh } from "@/app/utils";
+import { Settings, StyleSheet, View } from 'react-native';
+import ThemedScrollView from '@/components/ThemedScrollView';
+import { get_wheel_speed_kmh_from_frequency } from "@/app/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LogEntry } from "@/app/(tabs)/log";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ThemedText } from "@/components/ThemedText";
+import { BlueButton } from "@/components/BlueButton";
+import { ThemedView } from "@/components/ThemedView";
+import { useBluetooth } from "@/hooks/useBluetooth";
 
-export default function App() {
-  const sampleRate = Settings.get('sampleRate');
-  const peakThreshold = Settings.get('peakThreshold');
-  const [isRecordingSession, setIsRecordingSession] = React.useState(false);
-  const [savedRecording, setSavedRecording] = React.useState<number[]>([]);
-  const [speed, setSpeed] = React.useState<number>(0);
+const Stack = createNativeStackNavigator()
 
-  function onReceiveChunk(chunk: Uint8Array) {
-    const _speed = get_wheel_speed_kmh(chunk, Settings.get('wheelDiameter'), sampleRate, peakThreshold);
-    setSpeed(_speed);
+const App = () => {
+  const [_speed, setSpeed] = React.useState<number>(0);
+  const [previousSpeed, setPreviousSpeed] = React.useState(0);
+  // const [txId, setTxId] = React.useState<Number>(-1);
 
-    setSavedRecording(prevSavedRecording => [...prevSavedRecording, _speed]);
+  const onReceiveData = (data: String, _: Number) => {
+    const _speed = get_wheel_speed_kmh_from_frequency(Number(data), Settings.get('wheelDiameter'))
+    console.log("onReceiveData", data, _speed);
+    setPreviousSpeed(speed);
+    setSpeed(_speed ? _speed : 0);
   }
 
-  const { stopRecording, startRecording, isRecordingAllowed } = useRecordSignal(onReceiveChunk);
+  const {
+    connectedDevice,
+    connectToPeripheral,
+    discoveredDevices,
+    isScanning,
+    startScan,
+    stopScan,
+    sensorValue,
+    startRecording,
+    stopRecording,
+    isRecording,
+    savedRecording,
+  } = useBluetooth(onReceiveData);
 
-  const startSession = () => {
-    console.log('Session started');
-    startRecording().then(() => setIsRecordingSession(true));
-  }
+  const potentialPreferredDevices = discoveredDevices.filter(device => device.name === Settings.get('preferredDevice'))
+  const wheelDiameter = Settings.get('wheelDiameter');
+  const preferredDevice = potentialPreferredDevices.length > 0 ? potentialPreferredDevices[0] : null;
+  const speed = sensorValue ? get_wheel_speed_kmh_from_frequency(sensorValue, wheelDiameter) : 0;
 
   const stopSession = async () => {
-    console.log('Session stopped');
-    await stopRecording();
-    setIsRecordingSession(false);
+    stopRecording();
 
     try {
       const log: LogEntry = {
         date: new Date().toISOString(),
-        frequencies: savedRecording,
+        frequencies: savedRecording.map(frequency => get_wheel_speed_kmh_from_frequency(frequency, wheelDiameter)),
         wheelDiameter: Number(Settings.get('wheelDiameter')),
       };
       const jsonValue = JSON.stringify(log);
-      console.log('saving session');
+      console.log('saving session', log)
       await AsyncStorage.setItem('speed-session-' + log.date, jsonValue);
     } catch (e) {
       console.log(e);
@@ -48,17 +62,59 @@ export default function App() {
   }
 
   return (
-    <ParallaxScrollView>
-      <Button
-        disabled={!isRecordingAllowed}
-        title={isRecordingSession ? 'Stop session' : 'Start session'}
-        onPress={isRecordingSession ? stopSession : startSession}
-      />
-      <View style={styles.container}>
-        <Speedgauge value={speed.toFixed(1)}/>
-      </View>
-      <Text style={styles.speed}>{speed.toFixed(1)} km/h</Text>
-    </ParallaxScrollView>
+    <>
+      <ThemedScrollView style={{ padding: 0 }} scrollEnabled={false}>
+        <View style={styles.speedContainer}>
+          {/*<ThemedText style={styles.speedNumber}>{(111.10).toFixed(1)}</ThemedText>*/}
+          <ThemedText style={styles.speedNumber}>
+            {connectedDevice ? speed.toFixed(1) : "-"}
+            {/*{sensorValue ? sensorValue : "-"}*/}
+          </ThemedText>
+          <ThemedText style={styles.speedUnit}>km/h</ThemedText>
+        </View>
+      </ThemedScrollView>
+      {preferredDevice ? (
+        <ThemedView style={styles.startButton}>
+          <BlueButton
+            title={preferredDevice ? "Connect to " + preferredDevice.name : "-"}
+            onPress={preferredDevice ? () => connectToPeripheral(preferredDevice) : () => {
+            }}
+            style={{ padding: 22 }}
+          />
+        </ThemedView>
+      ) : null}
+      {!preferredDevice ? (
+        <ThemedView style={styles.startButton}>
+          <BlueButton
+            title={isScanning ? 'Stop scanning' : 'Scan Bluetooth Devices'}
+            onPress={isScanning ? stopScan : startScan}
+            style={{ padding: 22 }}
+          />
+        </ThemedView>
+      ) : null}
+      <ThemedView style={styles.startButton}>
+        <BlueButton
+          // disabled={sensorValue != null}
+          title={isRecording ? 'Stop session' : 'Start session'}
+          onPress={isRecording ? stopSession : startRecording}
+          style={{ padding: 22 }}
+        />
+      </ThemedView>
+    </>
+  );
+}
+
+export default function HomeBaseView() {
+  return (
+    <NavigationContainer independent>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Logs"
+          component={App}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -67,19 +123,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  speedContainer: {
+    paddingTop: 80,
+    verticalAlign: 'bottom',
   },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  speed: {
-    fontSize: 55,
-    fontWeight: '600',
+  speedNumber: {
+    fontFamily: 'MonomaniacOneRegular',
+    fontSize: 150,
     textAlign: 'center',
+    lineHeight: 160,
+  },
+  speedUnit: {
+    fontFamily: 'MonomaniacOneRegular',
+    fontSize: 50,
+    lineHeight: 60,
+    textAlign: 'right',
+    paddingHorizontal: 10,
+  },
+  startButton: {
+    padding: 16,
+    paddingBottom: 24
   }
 });

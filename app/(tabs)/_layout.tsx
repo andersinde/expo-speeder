@@ -7,15 +7,10 @@ export default function TabLayout() {
   // https://icons.expo.fyi/Index for list of icons
 
   return (
-    // <SafeAreaView style={{flex: 1}}>
     <Tabs
       screenOptions={{
-        tabBarStyle: { height: 75 },
+        tabBarStyle: { height: 80 },
         tabBarShowLabel: false,
-        // tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // tabBarActiveBackgroundColor: Colors[colorScheme ?? 'light'].background,
-        // tabBarInactiveBackgroundColor: Colors[colorScheme ?? 'light'].background,
         headerShown: false,
       }}>
       <Tabs.Screen
@@ -37,24 +32,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="bluetooth"
-        options={{
-          title: 'Bluetooth',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'bluetooth' : 'bluetooth-outline'} color={color}/>
-          ),
-        }}
-      />
-      {/*<Tabs.Screen*/}
-      {/*  name="signal"*/}
-      {/*  options={{*/}
-      {/*    title: 'Signal',*/}
-      {/*    tabBarIcon: ({ color, focused }) => (*/}
-      {/*      <TabBarIcon name={focused ? 'ear' : 'ear-outline'} color={color}/>*/}
-      {/*    ),*/}
-      {/*  }}*/}
-      {/*/>*/}
-      <Tabs.Screen
         name="settings"
         options={{
           title: 'Settings',
@@ -64,6 +41,5 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-    // </SafeAreaView>
   );
 }

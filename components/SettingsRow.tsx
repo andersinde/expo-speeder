@@ -7,8 +7,9 @@ type SettingsRowTextProps = {
   label: string | number;
   dataKey: string;
   value: any;
-  onSetValue: (e: any) => void;
+  onSetValue: (value: any) => void;
   isBoolean?: boolean;
+  keyboardType?: "numeric" | "email-address" | "phone-pad" | "default";
 };
 
 export default function SettingsRow({
@@ -16,7 +17,8 @@ export default function SettingsRow({
   dataKey,
   value,
   onSetValue,
-  isBoolean = false
+  isBoolean = false,
+  keyboardType = "numeric"
 }: SettingsRowTextProps) {
   return (
     <View
@@ -32,7 +34,10 @@ export default function SettingsRow({
       <ThemedText>{label}</ThemedText>
       {isBoolean ? (
         <Switch
-          onValueChange={onSetValue}
+          onValueChange={(newValue) => {
+            Settings.set({ [dataKey]: newValue });
+            onSetValue(newValue)
+          }}
           value={value}
         />
       ) : (
@@ -43,7 +48,7 @@ export default function SettingsRow({
             Settings.set({ [dataKey]: text });
             onSetValue(text);
           }}
-          keyboardType="numeric"
+          keyboardType={keyboardType}
           // clearTextOnFocus={true}
           // clearButtonMode="always"
           enterKeyHint={'done'}

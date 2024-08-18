@@ -15,9 +15,9 @@ export const DeviceList = ({ peripheral, connect, disconnect }: DeviceListProps)
     <>
       {name && (
         <View style={styles.deviceContainer}>
-          <View style={styles.deviceItem}>
+          {/*<View style={styles.deviceItem}>*/}
             <ThemedText style={styles.deviceName}>{name}</ThemedText>
-          </View>
+          {/*</View>*/}
           <BlueButton
             title={connected ? 'Disconnect' : 'Connect'}
             onPress={connected ? () => disconnect(peripheral) : () => connect(peripheral)}
@@ -32,23 +32,25 @@ const styles = StyleSheet.create({
   deviceContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    // marginBottom: 2,
+    // backgroundColor: '#f9f9f9',
+    padding: 5,
   },
-  deviceItem: {
-    marginBottom: 10,
-  },
+  // deviceItem: {
+    // marginBottom: 10,
+    // backgroundColor: 'red',
+  // },
   deviceName: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: 'bold',
-  },
-  deviceInfo: {
-    fontSize: 12,
+    // backgroundColor: 'blue',
+    textAlign: 'center',
   },
   deviceButton: {
     backgroundColor: '#2196F3',
-    padding: 8,
+    padding: 7,
     borderRadius: 5,
-    marginBottom: 20,
-    paddingHorizontal: 20,
+    // marginBottom: 20,
+    // paddingHorizontal: 20,
   },
 });
