@@ -18,7 +18,6 @@ export interface BlueToothContextType {
 }
 
 const BleManagerModule = NativeModules.BleManager;
-// @ts-ignore
 export const BlueToothContext = createContext<BlueToothContextType>({
   sensorValue: null,
   setSensorValue: null,

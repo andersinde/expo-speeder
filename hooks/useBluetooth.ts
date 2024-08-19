@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import BleManager from "react-native-ble-manager";
 import { Peripheral as RNPeripheral } from "react-native-ble-manager/dist/esm/types";
 import { BlueToothContext } from "@/app/_layout";
+import { uuid } from "expo-modules-core";
 
 const SERVICE_UUID = '0000aadb-0000-1000-8000-00805f9b34fb';
 const CHARACTERISTIC_UUID = '0000aadc-0000-1000-8000-00805f9b34fb';
@@ -24,7 +25,7 @@ export function useBluetooth(onReceiveData?: (value: any, tx_id: number) => void
   const { sensorValue, setSensorValue, BleManagerEmitter } = useContext(BlueToothContext);
 
   React.useEffect(() => {
-    BleManager.start({ showAlert: true })
+    BleManager.start({ showAlert: true, restoreIdentifierKey: uuid.v4() })
 
     let stopDiscoverListener = BleManagerEmitter.addListener(
       'BleManagerDiscoverPeripheral',
